@@ -32,6 +32,10 @@ public class Brand {
 		this.description = description;
 	}
 
+	public Brand(long id) {
+		this.id = id;
+	}
+
 	public long getId() {
 		return id;
 	}

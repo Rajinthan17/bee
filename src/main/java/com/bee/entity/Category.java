@@ -32,6 +32,10 @@ public class Category {
 		this.description = description;
 	}
 
+	public Category(Long id) {
+		this.id = id;
+	}
+
 	public long getId() {
 		return id;
 	}
