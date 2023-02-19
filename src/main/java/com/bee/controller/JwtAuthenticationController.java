@@ -17,6 +17,7 @@ import com.bee.service.JwtUserDetailsService;
 
 
 import com.bee.config.JwtTokenUtil;
+import com.bee.entity.User;
 import com.bee.request.JwtRequest;
 import com.bee.response.JwtResponse;
 
@@ -33,7 +34,7 @@ public class JwtAuthenticationController {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@RequestMapping(value = "/auth/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -54,5 +55,17 @@ public class JwtAuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
+	}
+	
+	@RequestMapping(value = "/auth/customer/register", method = RequestMethod.POST)
+	public ResponseEntity<?> createCustomerRegistraion(@RequestBody User user) throws Exception {
+		
+		if(userDetailsService.isUsernameExist(user.getUsername())) {
+			return ResponseEntity.badRequest().body("Username Alreday Exists");
+		}
+		
+		user.setType("CUSTOMER");
+		final User newUser = userDetailsService.save(user);
+		return ResponseEntity.ok(newUser);
 	}
 }
