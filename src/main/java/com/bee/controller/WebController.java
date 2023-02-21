@@ -17,4 +17,11 @@ public class WebController {
 		model.addAttribute("URL", url);
 		return "admin/login";
 	}
+	
+	@RequestMapping(value = "/pages/admin")
+	public String getAdmin(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/index";
+	}
 }
