@@ -195,6 +195,7 @@
                 <li class="active">
                     <a href="#">Product</a>
                 </li>
+                
             </ul>
 
         </nav>
@@ -202,19 +203,32 @@
         <!-- Page Content  -->
         <div id="content">
             <h2>Product</h2>
-            <a href='/pages/admin/product/create' class="btn btn-success float-end me-4 mb-2">Add</a>
-            <table class="table">
-			  <thead>
-			    <tr>
-			      <th scope="col">Name</th>
-			      <th scope="col">Description</th>
-			      <th scope="col">Handle</th>
-			    </tr>
-			  </thead>
-			  <tbody id='table-body'>
-			    
-			  </tbody>
-			</table>
+            	<div class="container-fluid">
+                    <div class="mb-3">
+					  <label for="name" class="form-label">Name : </label>
+					  <span id="name"></span>
+					</div>
+					<div class="mb-3">
+					  <label for="stock" class="form-label">Stock : </label>
+					  <span id="stock"></span>
+					</div>
+					<div class="mb-3">
+					  	<label for="brand" class="form-label">Brand : </label>
+					  	<span id="brand"></span>
+					</div>
+					<div class="mb-3">
+					  	<label for="category" class="form-label">Category : </label>
+					  	<span id="category"></span>
+					</div>
+					<div class="mb-3">
+					  <label for="description" class="form-label">Description : </label>
+					  <span id="description"></span>
+					</div>
+					<div class="mb-3">
+					  <img id='image' height="200px" width="auto"/>
+					</div>
+					<a href="/pages/admin/product" class="btn btn-dark">Back</a>
+            </div>
         </div>
     </div>
         <!-- Bootstrap core JS-->
@@ -223,8 +237,11 @@
         <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script>
 			var URL = "[[${URL}]]";
-			$.ajax({
-	         url: URL + '/products',
+			var id = "[[${id}]]";
+			var base64 = '';
+			
+	        $.ajax({
+	         url: URL + '/products/'+ id,
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -232,53 +249,17 @@
            	 },
 	         dataType:'json',
 	         success: function (data) {
-	             console.log(data);
-	            let htmlStr = '';
-		             data.forEach(item => {
-						htmlStr += '<tr>';
-						htmlStr += `<td>${item.name}</td>`;
-						htmlStr += `<td>${item.description} </td>`;
-						htmlStr += `<td>
-									<a href='/pages/admin/product/${item.id}/view' class="btn btn-sm btn-info">View</a>
-									<a href='/pages/admin/product/${item.id}' class="btn btn-sm btn-warning">Edit</a>
-									<a class="btn btn-sm btn-danger ms-2" onclick="onDelete(${item.id})">Delete</a>
-									</td>`;
-						htmlStr += '</tr>';
-					})
-					if(data.length <= 0){
-						htmlStr = `<div class='col-md-3 mt-2'/>
-										<div class='col-md-6 mt-2 align-self-center'>
-											<div class="fof">
-								        		<h1>Sorry! Data Not Found</h1>
-									    	</div>
-										</div>
-									<div class='col-md-2 mt-2'/>`
-					}
-					$('#table-body').html(htmlStr);
+				base64 = data.image;
+	            $('#name').html(data.name);
+	            $('#stock').html(data.stock);
+				$('#description').html(data.description);
+				$('#brand').html(data?.brand?.name);
+				$('#category').html(data?.category?.name);
+				document.getElementById("image").src=data.image;
 	         }
 	        });
 	        
-	        function onDelete(id){
-				$.ajax({
-			         url: URL + '/products/' + id,
-			         type: 'DELETE',
-			         headers: {
-			          	"Content-Type": "application/json",
-	          			"Authorization": "Bearer " + localStorage.getItem('token')
-		           	 },
-			         dataType:'json',
-			         data: {},
-			         success: function (data) {
-		             	console.log(data);
-						alert("Data Has Been Deleted Successfully...")
-						window.location.reload()
-			         },
-			         error : function (err) {
-			             console.log(err);
-			             alert("This Data Can't Be Deleted...")
-			         },
-			     });
-			}
+	        
 		</script>
     </body>
 </html>

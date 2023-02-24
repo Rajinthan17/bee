@@ -79,6 +79,6 @@ public class ProductController {
 	@DeleteMapping(value = "/products/{id}")
 	public ResponseEntity<?> delete(@PathVariable long id) throws Exception {
 		service.delete(id);
-		return ResponseEntity.ok("Deleted");
+		return ResponseEntity.ok(id);
 	}
 }

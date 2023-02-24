@@ -195,26 +195,46 @@
                 <li class="active">
                     <a href="#">Product</a>
                 </li>
+                
             </ul>
 
         </nav>
 
         <!-- Page Content  -->
         <div id="content">
-            <h2>Product</h2>
-            <a href='/pages/admin/product/create' class="btn btn-success float-end me-4 mb-2">Add</a>
-            <table class="table">
-			  <thead>
-			    <tr>
-			      <th scope="col">Name</th>
-			      <th scope="col">Description</th>
-			      <th scope="col">Handle</th>
-			    </tr>
-			  </thead>
-			  <tbody id='table-body'>
-			    
-			  </tbody>
-			</table>
+            <h2>Edit Product</h2>
+            	<div class="container-fluid">
+                    <div class="mb-3">
+					  <label for="name" class="form-label">Name</label>
+					  <input type="text" class="form-control" id="name" placeholder="Name">
+					</div>
+					<div class="mb-3">
+					  <label for="image" class="form-label">Image</label>
+					  <input type="file" class="form-control" id="image" placeholder="image" onchange="onLoad()">
+					</div>
+					<div class="mb-3">
+					  <label for="stock" class="form-label">Stock</label>
+					  <input type="number" class="form-control" id="stock" placeholder="stock">
+					</div>
+					<div class="mb-3">
+					  	<label for="brand" class="form-label">Brand</label>
+					  	<select class="form-select" id="brand" placeholder="brand">
+							
+						</select>
+					</div>
+					<div class="mb-3">
+					  	<label for="category" class="form-label">Category</label>
+					  	<select class="form-select" id="category" placeholder="category">
+							
+						</select>
+					</div>
+					<div class="mb-3">
+					  <label for="description" class="form-label">Description</label>
+					  <input type="text" class="form-control" id="description" placeholder="Description">
+					</div>
+					<a href="/pages/admin/product" class="btn btn-dark">Back</a>
+					<button type="button" class="btn btn-success" onclick="onUpdate();">Update</button>
+            </div>
         </div>
     </div>
         <!-- Bootstrap core JS-->
@@ -223,8 +243,10 @@
         <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script>
 			var URL = "[[${URL}]]";
+			var id = "[[${id}]]";
+			var base64 = '';
 			$.ajax({
-	         url: URL + '/products',
+	         url: URL + '/brands',
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -232,50 +254,96 @@
            	 },
 	         dataType:'json',
 	         success: function (data) {
-	             console.log(data);
-	            let htmlStr = '';
-		             data.forEach(item => {
-						htmlStr += '<tr>';
-						htmlStr += `<td>${item.name}</td>`;
-						htmlStr += `<td>${item.description} </td>`;
-						htmlStr += `<td>
-									<a href='/pages/admin/product/${item.id}/view' class="btn btn-sm btn-info">View</a>
-									<a href='/pages/admin/product/${item.id}' class="btn btn-sm btn-warning">Edit</a>
-									<a class="btn btn-sm btn-danger ms-2" onclick="onDelete(${item.id})">Delete</a>
-									</td>`;
-						htmlStr += '</tr>';
-					})
-					if(data.length <= 0){
-						htmlStr = `<div class='col-md-3 mt-2'/>
-										<div class='col-md-6 mt-2 align-self-center'>
-											<div class="fof">
-								        		<h1>Sorry! Data Not Found</h1>
-									    	</div>
-										</div>
-									<div class='col-md-2 mt-2'/>`
-					}
-					$('#table-body').html(htmlStr);
+				console.log(data);
+           		let select = document.getElementById('brand');
+           		data.forEach(item => {
+					   var opt = document.createElement('option');
+					   opt.value = item.id;
+					   opt.innerHTML = item.name;
+					   select.appendChild(opt);
+			    })
 	         }
 	        });
 	        
-	        function onDelete(id){
+	        $.ajax({
+	         url: URL + '/categories',
+	         type: 'GET',
+	         headers: {
+	          "Content-Type": "application/json",
+	          "Authorization": "Bearer " + localStorage.getItem('token')
+           	 },
+	         dataType:'json',
+	         success: function (data) {
+	            console.log(data);
+	            let select = document.getElementById('category');
+           		data.forEach(item => {
+					   var opt = document.createElement('option');
+					   opt.value = item.id;
+					   opt.innerHTML = item.name;
+					   select.appendChild(opt);
+			    })
+	         }
+	        });
+	        
+	        $.ajax({
+	         url: URL + '/products/'+ id,
+	         type: 'GET',
+	         headers: {
+	          "Content-Type": "application/json",
+	          "Authorization": "Bearer " + localStorage.getItem('token')
+           	 },
+	         dataType:'json',
+	         success: function (data) {
+				base64 = data.image;
+	            $('#name').val(data.name);
+	            $('#stock').val(data.stock);
+				$('#description').val(data.description);
+				document.getElementById('brand').value = data?.brand?.id
+				document.getElementById('category').value = data?.category?.id
+	         }
+	        });
+	        
+	        function onLoad(){
+				var file = document.getElementById("image").files[0];
+				if (file) {
+				  var filereader = new FileReader();
+				  filereader.readAsDataURL(file);
+				  filereader.onload = function (evt) {
+					  console.log(evt.target.result);
+				     base64 = evt.target.result;
+				  }
+			  	}
+				
+			}
+	        
+	        function onUpdate(){
+				var brand = document.getElementById("brand")?.value;
+				var category = document.getElementById("category")?.value;
+				let data = {
+					name : $('#name').val(),
+					stock : $('#stock').val(),
+					brand_id : brand,
+					category_id : category,
+					image : base64,
+				 	description : $('#description').val()
+				}
 				$.ajax({
 			         url: URL + '/products/' + id,
-			         type: 'DELETE',
+			         type: 'PUT',
 			         headers: {
 			          	"Content-Type": "application/json",
 	          			"Authorization": "Bearer " + localStorage.getItem('token')
 		           	 },
 			         dataType:'json',
-			         data: {},
+			         data: JSON.stringify(data),
 			         success: function (data) {
 		             	console.log(data);
-						alert("Data Has Been Deleted Successfully...")
-						window.location.reload()
+						alert("Data Has Been Updated Successfully...")
+						window.location.href="/pages/admin/product";
 			         },
 			         error : function (err) {
 			             console.log(err);
-			             alert("This Data Can't Be Deleted...")
+			             alert("Something Went Wrong...")
 			         },
 			     });
 			}

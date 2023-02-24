@@ -76,4 +76,20 @@ public class WebController {
 		model.addAttribute("URL", url);
 		return "admin/product_create";
 	}
+	
+	@RequestMapping(value = "/pages/admin/product/{id}")
+	public String getProductEdit(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/product_edit";
+	}
+	
+	@RequestMapping(value = "/pages/admin/product/{id}/view")
+	public String getProductView(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/product_view";
+	}
 }
