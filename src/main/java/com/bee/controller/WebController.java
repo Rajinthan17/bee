@@ -40,4 +40,40 @@ public class WebController {
 		model.addAttribute("id", id);
 		return "admin/category_edit";
 	}
+	
+	@RequestMapping(value = "/pages/admin/brand")
+	public String getBrand(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/brand";
+	}
+	
+	@RequestMapping(value = "/pages/admin/brand/create")
+	public String getBrandCreate(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/brand_create";
+	}
+	
+	@RequestMapping(value = "/pages/admin/brand/{id}")
+	public String getBrandEdit(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/brand_edit";
+	}
+	
+	@RequestMapping(value = "/pages/admin/product")
+	public String getProduct(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/product";
+	}
+	
+	@RequestMapping(value = "/pages/admin/product/create")
+	public String getProductCreate(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/product_create";
+	}
 }

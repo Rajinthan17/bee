@@ -54,6 +54,6 @@ public class BrandController {
 	@DeleteMapping(value = "/brands/{id}")
 	public ResponseEntity<?> delete(@PathVariable long id) throws Exception {
 		service.delete(id);
-		return ResponseEntity.ok("Deleted");
+		return ResponseEntity.ok(id);
 	}
 }
