@@ -30,6 +30,9 @@ public class Product {
 	
 	@Column(nullable = true)
 	private Integer stock;
+
+	@Column(nullable = true)
+	private Double price;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "brand_id", referencedColumnName = "id")
@@ -99,6 +102,13 @@ public class Product {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
 	
 }

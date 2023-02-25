@@ -213,6 +213,10 @@
 					  <span id="stock"></span>
 					</div>
 					<div class="mb-3">
+					  <label for="price" class="form-label">Price : </label>
+					  <span id="price"></span>
+					</div>
+					<div class="mb-3">
 					  	<label for="brand" class="form-label">Brand : </label>
 					  	<span id="brand"></span>
 					</div>
@@ -252,6 +256,7 @@
 				base64 = data.image;
 	            $('#name').html(data.name);
 	            $('#stock').html(data.stock);
+	            $('#price').html(data.price);
 				$('#description').html(data.description);
 				$('#brand').html(data?.brand?.name);
 				$('#category').html(data?.category?.name);

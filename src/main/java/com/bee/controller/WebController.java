@@ -12,7 +12,7 @@ public class WebController {
 	@Value("${server.port}")
 	private String port;
 	
-	@RequestMapping(value = "/pages")
+	@RequestMapping(value = "/pages/admin")
 	public String getAdminLogin(Model model) {
 		String url = "http://localhost:" + port;
 		model.addAttribute("URL", url);
@@ -135,5 +135,12 @@ public class WebController {
 		model.addAttribute("URL", url);
 		model.addAttribute("id", id);
 		return "admin/customer_edit";
+	}
+	
+	@RequestMapping(value = "/")
+	public String getCustomerEdit(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "index";
 	}
 }
