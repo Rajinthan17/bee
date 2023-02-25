@@ -92,4 +92,48 @@ public class WebController {
 		model.addAttribute("id", id);
 		return "admin/product_view";
 	}
+	
+	@RequestMapping(value = "/pages/admin/user")
+	public String getUsers(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/user";
+	}
+	
+	@RequestMapping(value = "/pages/admin/user/create")
+	public String getUserCreate(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/user_create";
+	}
+	
+	@RequestMapping(value = "/pages/admin/user/{id}")
+	public String getUserEdit(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/user_edit";
+	}
+	
+	@RequestMapping(value = "/pages/admin/customer")
+	public String getCustomer(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/customer";
+	}
+	
+	@RequestMapping(value = "/pages/admin/customer/create")
+	public String getCustomerCreate(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/customer_create";
+	}
+	
+	@RequestMapping(value = "/pages/admin/customer/{id}")
+	public String getCustomerEdit(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/customer_edit";
+	}
 }

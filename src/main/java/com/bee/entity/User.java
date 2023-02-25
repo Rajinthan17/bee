@@ -1,5 +1,7 @@
 package com.bee.entity;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,11 +12,17 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column
+	private String fullname;
+	@Column
 	private String username;
 	@Column
 	private String password;
 	@Column
 	private String type;
+	@Column
+	private Date dob;
+	@Column
+	private Double balance;
 	
 	
 	public User() {
@@ -57,6 +65,28 @@ public class User {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+	public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
 }
