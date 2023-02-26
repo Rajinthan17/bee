@@ -192,7 +192,7 @@
                 <li class="">
                     <a href="/pages/admin/brand">Brand</a>
                 </li>
-                <li class="active">
+                <li class="">
                     <a href="/pages/admin/product">Product</a>
                 </li>
                 <li class="">
@@ -204,50 +204,47 @@
                 <li class="">
                     <a href="/pages/admin/plan">Plan</a>
                 </li>
-                <li class="">
+                <li class="active">
                     <a href="/pages/admin/purchase">Purchase</a>
                 </li>
             </ul>
-
         </nav>
 
         <!-- Page Content  -->
         <div id="content">
-            <h2>Add Product</h2>
+            <h2>Add Purchase</h2>
             	<div class="container-fluid">
-                    <div class="mb-3">
-					  <label for="name" class="form-label">Name</label>
-					  <input type="text" class="form-control" id="name" placeholder="Name">
-					</div>
+                    
 					<div class="mb-3">
-					  <label for="image" class="form-label">Image</label>
-					  <input type="file" class="form-control" id="image" placeholder="image" onchange="onLoad()">
-					</div>
-					<div class="mb-3">
-					  <label for="stock" class="form-label">Stock</label>
-					  <input type="number" class="form-control" id="stock" placeholder="stock">
-					</div>
-					<div class="mb-3">
-					  <label for="price" class="form-label">Price</label>
-					  <input type="number" class="form-control" id="price" placeholder="price">
-					</div>
-					<div class="mb-3">
-					  	<label for="brand" class="form-label">Brand</label>
-					  	<select class="form-select" id="brand" placeholder="brand">
+					  	<label for="user" class="form-label">User</label>
+					  	<select class="form-select" id="user" placeholder="user">
 							
 						</select>
 					</div>
 					<div class="mb-3">
-					  	<label for="category" class="form-label">Category</label>
-					  	<select class="form-select" id="category" placeholder="category">
+					  	<label for="product" class="form-label">Product</label>
+					  	<select class="form-select" id="product" placeholder="product">
 							
+						</select>
+					</div>
+					<div class="mb-3">
+					  	<label for="plan" class="form-label">Plan</label>
+					  	<select class="form-select" id="plan" placeholder="plan">
+							
+						</select>
+					</div>
+					<div class="mb-3">
+					  	<label for="status" class="form-label">Status</label>
+					  	<select class="form-select" id="status" placeholder="status">
+							<option value="OPEN">OPEN</option>
+							<option value="COMPLETED">COMPLETED</option>
 						</select>
 					</div>
 					<div class="mb-3">
 					  <label for="description" class="form-label">Description</label>
 					  <input type="text" class="form-control" id="description" placeholder="Description">
 					</div>
-					<a href="/pages/admin/product" class="btn btn-dark">Back</a>
+					<a href="/pages/admin/purchase" class="btn btn-dark">Back</a>
 					<button type="button" class="btn btn-success" onclick="onCreate();">Save</button>
             </div>
         </div>
@@ -260,7 +257,7 @@
 			var URL = "[[${URL}]]";
 			var base64 = '';
 			$.ajax({
-	         url: URL + '/brands',
+	         url: URL + '/users?type=CUSTOMER',
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -269,7 +266,27 @@
 	         dataType:'json',
 	         success: function (data) {
 				console.log(data);
-           		let select = document.getElementById('brand');
+           		let select = document.getElementById('user');
+           		data.forEach(item => {
+					   var opt = document.createElement('option');
+					   opt.value = item.id;
+					   opt.innerHTML = item.fullname ?? item.username;
+					   select.appendChild(opt);
+			    })
+	         }
+	        });
+	        
+	        $.ajax({
+	         url: URL + '/products',
+	         type: 'GET',
+	         headers: {
+	          "Content-Type": "application/json",
+	          "Authorization": "Bearer " + localStorage.getItem('token')
+           	 },
+	         dataType:'json',
+	         success: function (data) {
+	            console.log(data);
+	            let select = document.getElementById('product');
            		data.forEach(item => {
 					   var opt = document.createElement('option');
 					   opt.value = item.id;
@@ -280,7 +297,7 @@
 	        });
 	        
 	        $.ajax({
-	         url: URL + '/categories',
+	         url: URL + '/plans',
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -289,7 +306,7 @@
 	         dataType:'json',
 	         success: function (data) {
 	            console.log(data);
-	            let select = document.getElementById('category');
+	            let select = document.getElementById('plan');
            		data.forEach(item => {
 					   var opt = document.createElement('option');
 					   opt.value = item.id;
@@ -299,34 +316,21 @@
 	         }
 	        });
 	        
-	        function onLoad(){
-				var file = document.getElementById("image").files[0];
-				if (file) {
-				  var filereader = new FileReader();
-				  filereader.readAsDataURL(file);
-				  filereader.onload = function (evt) {
-					  console.log(evt.target.result);
-				     base64 = evt.target.result;
-				  }
-			  	}
-				
-			}
-	        
 	        function onCreate(){
 				
-				var brand = document.getElementById("brand")?.value;
-				var category = document.getElementById("category")?.value;
+				var user = document.getElementById("user")?.value;
+				var product = document.getElementById("product")?.value;
+				var plan = document.getElementById("plan")?.value;
+				var status = document.getElementById("status")?.value;
 				let data = {
-					name : $('#name').val(),
-					stock : $('#stock').val(),
-					price : $('#price').val(),
-					brand_id : brand,
-					category_id : category,
-					image : base64,
+					user_id : user,
+					product_id : product,
+					plan_id : plan,
+					status : status,
 				 	description : $('#description').val()
 				}
 				$.ajax({
-			         url: URL + '/products',
+			         url: URL + '/purchases',
 			         type: 'POST',
 			         headers: {
 			          	"Content-Type": "application/json",
@@ -337,7 +341,7 @@
 			         success: function (data) {
 		             	console.log(data);
 						alert("Data Has Been Saved Successfully...")
-						window.location.href="/pages/admin/product";
+						window.location.href="/pages/admin/purchase";
 			         },
 			         error : function (err) {
 			             console.log(err);

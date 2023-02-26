@@ -29,6 +29,10 @@ public class Plan {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Plan(Long id) {
+		this.id = id;
+	}
+
 	public long getId() {
 		return id;
 	}

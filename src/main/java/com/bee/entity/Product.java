@@ -47,6 +47,10 @@ public class Product {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Product(Long id) {
+		this.id = id;
+	}
+
 	public long getId() {
 		return id;
 	}

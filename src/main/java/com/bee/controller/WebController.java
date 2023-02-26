@@ -159,6 +159,28 @@ public class WebController {
 		return "admin/plan_edit";
 	}
 	
+	@RequestMapping(value = "/pages/admin/purchase")
+	public String getPurchase(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/purchase";
+	}
+	
+	@RequestMapping(value = "/pages/admin/purchase/create")
+	public String getPuchaseCreate(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/purchase_create";
+	}
+	
+	@RequestMapping(value = "/pages/admin/purchase/{id}")
+	public String getPurchaseEdit(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/purchase_edit";
+	}
+	
 	@RequestMapping(value = "/")
 	public String getCustomerEdit(Model model) {
 		String url = "http://localhost:" + port;

@@ -192,7 +192,7 @@
                 <li class="">
                     <a href="/pages/admin/brand">Brand</a>
                 </li>
-                <li class="active">
+                <li class="">
                     <a href="/pages/admin/product">Product</a>
                 </li>
                 <li class="">
@@ -204,51 +204,29 @@
                 <li class="">
                     <a href="/pages/admin/plan">Plan</a>
                 </li>
-                <li class="">
+                <li class="active">
                     <a href="/pages/admin/purchase">Purchase</a>
                 </li>
             </ul>
-
         </nav>
 
         <!-- Page Content  -->
         <div id="content">
-            <h2>Add Product</h2>
+            <h2>Edit Purchase</h2>
             	<div class="container-fluid">
-                    <div class="mb-3">
-					  <label for="name" class="form-label">Name</label>
-					  <input type="text" class="form-control" id="name" placeholder="Name">
-					</div>
 					<div class="mb-3">
-					  <label for="image" class="form-label">Image</label>
-					  <input type="file" class="form-control" id="image" placeholder="image" onchange="onLoad()">
-					</div>
-					<div class="mb-3">
-					  <label for="stock" class="form-label">Stock</label>
-					  <input type="number" class="form-control" id="stock" placeholder="stock">
-					</div>
-					<div class="mb-3">
-					  <label for="price" class="form-label">Price</label>
-					  <input type="number" class="form-control" id="price" placeholder="price">
-					</div>
-					<div class="mb-3">
-					  	<label for="brand" class="form-label">Brand</label>
-					  	<select class="form-select" id="brand" placeholder="brand">
-							
-						</select>
-					</div>
-					<div class="mb-3">
-					  	<label for="category" class="form-label">Category</label>
-					  	<select class="form-select" id="category" placeholder="category">
-							
+					  	<label for="status" class="form-label">Status</label>
+					  	<select class="form-select" id="status" placeholder="status">
+							<option value="OPEN">OPEN</option>
+							<option value="COMPLETED">COMPLETED</option>
 						</select>
 					</div>
 					<div class="mb-3">
 					  <label for="description" class="form-label">Description</label>
 					  <input type="text" class="form-control" id="description" placeholder="Description">
 					</div>
-					<a href="/pages/admin/product" class="btn btn-dark">Back</a>
-					<button type="button" class="btn btn-success" onclick="onCreate();">Save</button>
+					<a href="/pages/admin/purchase" class="btn btn-dark">Back</a>
+					<button type="button" class="btn btn-success" onclick="onUpdate();">Update</button>
             </div>
         </div>
     </div>
@@ -258,29 +236,10 @@
         <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script>
 			var URL = "[[${URL}]]";
+			var id = "[[${id}]]";
 			var base64 = '';
-			$.ajax({
-	         url: URL + '/brands',
-	         type: 'GET',
-	         headers: {
-	          "Content-Type": "application/json",
-	          "Authorization": "Bearer " + localStorage.getItem('token')
-           	 },
-	         dataType:'json',
-	         success: function (data) {
-				console.log(data);
-           		let select = document.getElementById('brand');
-           		data.forEach(item => {
-					   var opt = document.createElement('option');
-					   opt.value = item.id;
-					   opt.innerHTML = item.name;
-					   select.appendChild(opt);
-			    })
-	         }
-	        });
-	        
 	        $.ajax({
-	         url: URL + '/categories',
+	         url: URL + '/purchases/'+ id,
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -288,46 +247,21 @@
            	 },
 	         dataType:'json',
 	         success: function (data) {
-	            console.log(data);
-	            let select = document.getElementById('category');
-           		data.forEach(item => {
-					   var opt = document.createElement('option');
-					   opt.value = item.id;
-					   opt.innerHTML = item.name;
-					   select.appendChild(opt);
-			    })
+				base64 = data.image;
+				$('#description').val(data.description);
+				document.getElementById('status').value = data?.status
 	         }
 	        });
 	        
-	        function onLoad(){
-				var file = document.getElementById("image").files[0];
-				if (file) {
-				  var filereader = new FileReader();
-				  filereader.readAsDataURL(file);
-				  filereader.onload = function (evt) {
-					  console.log(evt.target.result);
-				     base64 = evt.target.result;
-				  }
-			  	}
-				
-			}
-	        
-	        function onCreate(){
-				
-				var brand = document.getElementById("brand")?.value;
-				var category = document.getElementById("category")?.value;
+	        function onUpdate(){
+				var status = document.getElementById("status")?.value;
 				let data = {
-					name : $('#name').val(),
-					stock : $('#stock').val(),
-					price : $('#price').val(),
-					brand_id : brand,
-					category_id : category,
-					image : base64,
+					status : status,
 				 	description : $('#description').val()
 				}
 				$.ajax({
-			         url: URL + '/products',
-			         type: 'POST',
+			         url: URL + '/purchases/' + id,
+			         type: 'PUT',
 			         headers: {
 			          	"Content-Type": "application/json",
 	          			"Authorization": "Bearer " + localStorage.getItem('token')
@@ -336,8 +270,8 @@
 			         data: JSON.stringify(data),
 			         success: function (data) {
 		             	console.log(data);
-						alert("Data Has Been Saved Successfully...")
-						window.location.href="/pages/admin/product";
+						alert("Data Has Been Updated Successfully...")
+						window.location.href="/pages/admin/purchase";
 			         },
 			         error : function (err) {
 			             console.log(err);
