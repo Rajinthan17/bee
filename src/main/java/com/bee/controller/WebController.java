@@ -137,10 +137,46 @@ public class WebController {
 		return "admin/customer_edit";
 	}
 	
+	@RequestMapping(value = "/pages/admin/plan")
+	public String getPlan(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/plan";
+	}
+	
+	@RequestMapping(value = "/pages/admin/plan/create")
+	public String getPlanCreate(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "admin/plan_create";
+	}
+	
+	@RequestMapping(value = "/pages/admin/plan/{id}")
+	public String getPlanEdit(@PathVariable String id, Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		model.addAttribute("id", id);
+		return "admin/plan_edit";
+	}
+	
 	@RequestMapping(value = "/")
 	public String getCustomerEdit(Model model) {
 		String url = "http://localhost:" + port;
 		model.addAttribute("URL", url);
 		return "index";
+	}
+	
+	@RequestMapping(value = "/pages/login")
+	public String getCustomerLogin(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "login";
+	}
+	
+	@RequestMapping(value = "/pages/register")
+	public String getCustomerRegister(Model model) {
+		String url = "http://localhost:" + port;
+		model.addAttribute("URL", url);
+		return "register";
 	}
 }

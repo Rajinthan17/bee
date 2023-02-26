@@ -223,7 +223,13 @@
 					  <label for="dob" class="form-label">Date Of Birth</label>
 					  <input type="date" class="form-control" id="dob" placeholder="dob">
 					</div>
-					
+					<div class="mb-3">
+					  	<label for="type" class="form-label">Role</label>
+					  	<select class="form-select" id="type" placeholder="type">
+							<option value="ADMIN">ADMIN</option>
+							<option value="SYSADMIN">SYS ADMIN</option>
+						</select>
+					</div>
 					<a href="/pages/admin/user" class="btn btn-dark">Back</a>
 					<button type="button" class="btn btn-success" onclick="onCreate();">Save</button>
             </div>
@@ -237,12 +243,13 @@
 			var URL = "[[${URL}]]";
 	        
 	        function onCreate(){
+				var type = document.getElementById("type")?.value;
 				let data = {
 					fullname : $('#fullname').val(),
 					username : $('#username').val(),
 					password : $('#password').val(),
 				 	dob : $('#dob').val(),
-				 	type : "ADMIN",
+				 	type : type,
 				 	balance : 15000,
 				}
 				$.ajax({

@@ -168,49 +168,85 @@ body {
 	  <nav class="navbar navbar-expand-md navbar-light bg-white">
 	    <div class="container-fluid p-0"> <a class="navbar-brand text-uppercase fw-800" href="#"><span class="border-red pe-2">Bumble</span>Bee</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNav" aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="fas fa-bars"></span> </button>
 	      <div class="collapse navbar-collapse" id="myNav">
+	      	<div class="navbar-nav ms-auto"> 
+	        	<a class="nav-link" aria-current="page" href="/">Products</a> 
+	        	<a class="nav-link" href="/pages/register">Register</a> 
+        	</div>
 	      </div>
 	    </div>
 	  </nav>
-	  <div class="row" id='products' style="min-height: 500px;">
+	  <div class="row w-100" style="min-height: 500px;">
+	  	<div class="col-md-4"></div>
+	  	<div class="col-md-4">
+		  	<div class="card-title text-center border-bottom">
+	            <h2 class="p-3">Register</h2>
+	      	</div>
+	          <div class="card-body">
+	            <form>
+	              <div class="mb-3">
+					  <label for="fullname" class="form-label">Fullname</label>
+					  <input type="text" class="form-control" id="fullname" placeholder="Fullname">
+					</div>
+                    <div class="mb-3">
+					  <label for="username" class="form-label">Username</label>
+					  <input type="text" class="form-control" id="username" placeholder="Username">
+					</div>
+					<div class="mb-3">
+					  <label for="password" class="form-label">Password</label>
+					  <input type="password" class="form-control" id="password" placeholder="Password">
+					</div>
+					<div class="mb-3">
+					  <label for="dob" class="form-label">Date Of Birth</label>
+					  <input type="date" class="form-control" id="dob" placeholder="dob">
+					</div>
+	              <div class="d-grid">
+	                <button type="button" id="submitBtn" class="btn main-bg">Signup</button>
+	              </div>
+	            </form>
+	          </div>
+	  		</div>
 	  </div>
 	</div>
 </body>
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script>
   		var URL = "[[${URL}]]";
-  		var token = localStorage.getItem('token');
-  		if(token){
-			  $('#myNav').html(`<div class="navbar-nav ms-auto"> 
-				        	<a class="nav-link active" aria-current="page" href="/">Products</a> 
-			        	</div>`);
-	 	}else{
-			 $('#myNav').html(`<div class="navbar-nav ms-auto"> 
-				        	<a class="nav-link active" aria-current="page" href="/">Products</a> 
-				        	<a class="nav-link" href="/pages/register">Register</a> 
-			        	</div>`);
-		}
-		$.ajax({
-	         url: URL + '/products',
-	         type: 'GET',
-	         headers: {
-	          "Content-Type": "application/json"
-           	 },
-	         dataType:'json',
-	         success: function (data) {
-	            let htmlStr = "";
-	            data.forEach((item) => {
-					htmlStr += `<div class="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
-							      <div class="product"> <img src="${item.image}" alt="">
-							      </div>
-							      <div class="tag bg-red">Available Stock ${item.stock}</div>
-							      <div class="title pt-4 pb-1">${item.name}</div>
-							      <div class="price">Rs. ${item.price.toFixed(2)}</div>
-							    </div>`;
-				});
-				$('#products').html(htmlStr);
-	         }
-        });
-       
+  		var button = document.getElementById('submitBtn');
+		button.onclick = function() {
+		    login();
+		};
+		
+		
+  		function login() {
+		  	let data = {
+					fullname : $('#fullname').val(),
+					username : $('#username').val(),
+					password : $('#password').val(),
+				 	dob : $('#dob').val(),
+				 	type : "CUSTOMER",
+				 	balance : 15000,
+				}
+				$.ajax({
+			         url: URL + '/auth/customer/register',
+			         type: 'POST',
+			         headers: {
+			          	"Content-Type": "application/json"
+		           	 },
+			         dataType:'json',
+			         data: JSON.stringify(data),
+			         success: function (data) {
+		             	console.log(data);
+						alert("Login via Mobile App to countinue...")
+						window.location.href="/";
+			         },
+			         error : function (err) {
+			             console.log(err);
+			             alert("Something Went Wrong...")
+			         },
+		     });
+	  	}
+  		
+		
 	</script>
 </body>
 </html>

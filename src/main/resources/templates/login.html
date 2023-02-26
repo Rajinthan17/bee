@@ -168,49 +168,71 @@ body {
 	  <nav class="navbar navbar-expand-md navbar-light bg-white">
 	    <div class="container-fluid p-0"> <a class="navbar-brand text-uppercase fw-800" href="#"><span class="border-red pe-2">Bumble</span>Bee</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNav" aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="fas fa-bars"></span> </button>
 	      <div class="collapse navbar-collapse" id="myNav">
+	      	<div class="navbar-nav ms-auto"> 
+	        	<a class="nav-link" aria-current="page" href="/">Products</a> 
+	        	<a class="nav-link active" href="/pages/login">Login</a> 
+	        	<a class="nav-link" href="/pages/register">Register</a> 
+        	</div>
 	      </div>
 	    </div>
 	  </nav>
-	  <div class="row" id='products' style="min-height: 500px;">
+	  <div class="row w-100" style="min-height: 500px;">
+	  	<div class="col-md-4"></div>
+	  	<div class="col-md-4">
+		  	<div class="card-title text-center border-bottom">
+	            <h2 class="p-3">Login</h2>
+	      	</div>
+	          <div class="card-body">
+	            <form>
+	              <div class="mb-4">
+	                <label for="username" class="form-label">Username</label>
+	                <input type="text" class="form-control" id="username" />
+	              </div>
+	              <div class="mb-4">
+	                <label for="password" class="form-label">Password</label>
+	                <input type="password" class="form-control" id="password" />
+	              </div>
+	              <div class="d-grid">
+	                <button type="button" id="submitBtn" class="btn main-bg">Login</button>
+	              </div>
+	            </form>
+	          </div>
+	  		</div>
 	  </div>
 	</div>
 </body>
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script>
   		var URL = "[[${URL}]]";
-  		var token = localStorage.getItem('token');
-  		if(token){
-			  $('#myNav').html(`<div class="navbar-nav ms-auto"> 
-				        	<a class="nav-link active" aria-current="page" href="/">Products</a> 
-			        	</div>`);
-	 	}else{
-			 $('#myNav').html(`<div class="navbar-nav ms-auto"> 
-				        	<a class="nav-link active" aria-current="page" href="/">Products</a> 
-				        	<a class="nav-link" href="/pages/register">Register</a> 
-			        	</div>`);
-		}
-		$.ajax({
-	         url: URL + '/products',
-	         type: 'GET',
-	         headers: {
-	          "Content-Type": "application/json"
-           	 },
-	         dataType:'json',
-	         success: function (data) {
-	            let htmlStr = "";
-	            data.forEach((item) => {
-					htmlStr += `<div class="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
-							      <div class="product"> <img src="${item.image}" alt="">
-							      </div>
-							      <div class="tag bg-red">Available Stock ${item.stock}</div>
-							      <div class="title pt-4 pb-1">${item.name}</div>
-							      <div class="price">Rs. ${item.price.toFixed(2)}</div>
-							    </div>`;
-				});
-				$('#products').html(htmlStr);
-	         }
-        });
-       
+  		var button = document.getElementById('submitBtn');
+		button.onclick = function() {
+		    login();
+		};
+		
+		
+  		function login() {
+		  	let data = {
+				username : $('#username').val(),
+			 	password : $('#password').val()
+			}
+		  	
+			$.ajax({
+	         	url: URL +'/auth/login',
+	         	type: 'POST',
+	         	headers: {
+	          		"Content-Type": "application/json"
+	        	},
+	         	dataType:'json',
+	         	data: JSON.stringify(data),
+	         	success: function (data) {
+	             	localStorage.setItem('token',data.token);
+	             	alert("Login Success");
+	             	window.location.href="/";
+	         	}
+	        });
+	  	}
+  		
+		
 	</script>
 </body>
 </html>

@@ -189,8 +189,20 @@
                 <li class="">
                     <a href="#">Category</a>
                 </li>
-                <li class="active">
+                <li class="">
                     <a href="#">Brand</a>
+                </li>
+                <li class="">
+                    <a href="#">Product</a>
+                </li>
+                <li class="">
+                    <a href="#">User</a>
+                </li>
+                <li class="">
+                    <a href="#">Customer</a>
+                </li>
+                <li class="active">
+                    <a href="#">Plan</a>
                 </li>
             </ul>
 
@@ -198,20 +210,23 @@
 
         <!-- Page Content  -->
         <div id="content">
-            <h2>Brand</h2>
-            <a href='/pages/admin/brand/create' class="btn btn-success float-end me-4 mb-2">Add</a>
-            <table class="table">
-			  <thead>
-			    <tr>
-			      <th scope="col">Name</th>
-			      <th scope="col">Description</th>
-			      <th scope="col">Handle</th>
-			    </tr>
-			  </thead>
-			  <tbody id='table-body'>
-			    
-			  </tbody>
-			</table>
+            <h2>Edit Plan</h2>
+            	<div class="container-fluid">
+                    <div class="mb-3">
+					  <label for="name" class="form-label">Name</label>
+					  <input type="text" class="form-control" id="name" placeholder="Name">
+					</div>
+					<div class="mb-3">
+					  <label for="number_of_payments" class="form-label">Number Of Payments</label>
+					  <input type="number" class="form-control" id="number_of_payments" placeholder="Number Of Payments">
+					</div>
+					<div class="mb-3">
+					  <label for="months" class="form-label">Months</label>
+					  <input type="nuber" class="form-control" id="months" placeholder="Months">
+					</div>
+					<a href="/pages/admin/plan" class="btn btn-dark">Back</a>
+					<button type="button" class="btn btn-success" onclick="onUpdate();">Update</button>
+            </div>
         </div>
     </div>
         <!-- Bootstrap core JS-->
@@ -220,8 +235,10 @@
         <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script>
 			var URL = "[[${URL}]]";
+			var id = "[[${id}]]";
+			
 			$.ajax({
-	         url: URL + '/brands',
+	         url: URL + '/plans/'+ id,
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -229,45 +246,35 @@
            	 },
 	         dataType:'json',
 	         success: function (data) {
-	             console.log(data);
-	            let htmlStr = '';
-		             data.forEach(item => {
-						htmlStr += '<tr>';
-						htmlStr += `<td>${item.name}</td>`;
-						htmlStr += `<td>${item.description} </td>`;
-						htmlStr += `<td>
-									<a href='/pages/admin/brand/${item.id}' class="btn btn-sm btn-warning">Edit</a>
-									<a class="btn btn-sm btn-danger ms-2" onclick="onDelete(${item.id})">Delete</a>
-									</td>`;
-						htmlStr += '</tr>';
-					})
-					if(data.length <= 0){
-						htmlStr = `<div class='mt-2'>
-								        	<h1>Sorry! Data Not Found</h1>
-									</div>`
-					}
-					$('#table-body').html(htmlStr);
+	            $('#name').val(data.name);
+				$('#number_of_payments').val(data.numberOfPayments);
+				$('#months').val(data.months);
 	         }
 	        });
 	        
-	        function onDelete(id){
+	        function onUpdate(){
+				let data = {
+					name : $('#name').val(),
+				 	numberOfPayments : $('#number_of_payments').val(),
+				 	months : $('#months').val()
+				}
 				$.ajax({
-			         url: URL + '/brands/' + id,
-			         type: 'DELETE',
+			         url: URL + '/plans/'+ id,
+			         type: 'PUT',
 			         headers: {
 			          	"Content-Type": "application/json",
 	          			"Authorization": "Bearer " + localStorage.getItem('token')
 		           	 },
 			         dataType:'json',
-			         data: {},
+			         data: JSON.stringify(data),
 			         success: function (data) {
 		             	console.log(data);
-						alert("Data Has Been Deleted Successfully...")
-						window.location.reload()
+						alert("Data Has Been Update Successfully...")
+						window.location.href="/pages/admin/plan";
 			         },
 			         error : function (err) {
 			             console.log(err);
-			             alert("This Data Can't Be Deleted...")
+			             alert("Something Went Wrong...")
 			         },
 			     });
 			}

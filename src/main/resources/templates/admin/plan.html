@@ -189,8 +189,20 @@
                 <li class="">
                     <a href="#">Category</a>
                 </li>
-                <li class="active">
+                <li class="">
                     <a href="#">Brand</a>
+                </li>
+                <li class="">
+                    <a href="#">Product</a>
+                </li>
+                <li class="">
+                    <a href="#">User</a>
+                </li>
+                <li class="">
+                    <a href="#">Customer</a>
+                </li>
+                <li class="active">
+                    <a href="#">Plan</a>
                 </li>
             </ul>
 
@@ -198,13 +210,14 @@
 
         <!-- Page Content  -->
         <div id="content">
-            <h2>Brand</h2>
-            <a href='/pages/admin/brand/create' class="btn btn-success float-end me-4 mb-2">Add</a>
+            <h2>Plan</h2>
+            <a href='/pages/admin/plan/create' class="btn btn-success float-end me-4 mb-2">Add</a>
             <table class="table">
 			  <thead>
 			    <tr>
 			      <th scope="col">Name</th>
-			      <th scope="col">Description</th>
+			      <th scope="col">Numer Of Payments</th>
+			      <th scope="col">Months</th>
 			      <th scope="col">Handle</th>
 			    </tr>
 			  </thead>
@@ -221,7 +234,7 @@
 		<script>
 			var URL = "[[${URL}]]";
 			$.ajax({
-	         url: URL + '/brands',
+	         url: URL + '/plans',
 	         type: 'GET',
 	         headers: {
 	          "Content-Type": "application/json",
@@ -234,9 +247,10 @@
 		             data.forEach(item => {
 						htmlStr += '<tr>';
 						htmlStr += `<td>${item.name}</td>`;
-						htmlStr += `<td>${item.description} </td>`;
+						htmlStr += `<td>${item.numberOfPayments} </td>`;
+						htmlStr += `<td>${item.months} </td>`;
 						htmlStr += `<td>
-									<a href='/pages/admin/brand/${item.id}' class="btn btn-sm btn-warning">Edit</a>
+									<a href='/pages/admin/plan/${item.id}' class="btn btn-sm btn-warning">Edit</a>
 									<a class="btn btn-sm btn-danger ms-2" onclick="onDelete(${item.id})">Delete</a>
 									</td>`;
 						htmlStr += '</tr>';
@@ -252,7 +266,7 @@
 	        
 	        function onDelete(id){
 				$.ajax({
-			         url: URL + '/brands/' + id,
+			         url: URL + '/plans/' + id,
 			         type: 'DELETE',
 			         headers: {
 			          	"Content-Type": "application/json",
