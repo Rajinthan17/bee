@@ -251,7 +251,7 @@
 						htmlStr += '<tr>';
 						htmlStr += `<td>${item.fullname}</td>`;
 						htmlStr += `<td>${new Date(item.dob).toISOString().slice(0, 10)} </td>`;
-						htmlStr += `<td>${item.balance.toFixed(2)} </td>`;
+						htmlStr += `<td>${item?.balance?.toFixed(2)} </td>`;
 						htmlStr += `<td>
 									<a href='/pages/admin/customer/${item.id}' class="btn btn-sm btn-warning">Edit</a>
 									<a class="btn btn-sm btn-danger ms-2" onclick="onDelete(${item.id})">Delete</a>
